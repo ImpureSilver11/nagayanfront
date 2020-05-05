@@ -1,14 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+// import App from './App';
 import * as serviceWorker from './serviceWorker';
-import MyComponent from './components/post'
+import ImagePost from './components/post'
+{/* <App /> */}
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
-    <MyComponent />
+    <ImagePost />
   </React.StrictMode>,
   document.getElementById('root')
 );
