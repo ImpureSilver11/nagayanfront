@@ -3,10 +3,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import MyComponent from './components/post'
 
 ReactDOM.render(
   <React.StrictMode>
     <App />
+    <MyComponent />
   </React.StrictMode>,
   document.getElementById('root')
 );
