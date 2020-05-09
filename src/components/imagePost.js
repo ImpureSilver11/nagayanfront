@@ -1,8 +1,10 @@
 import React from 'react';
 import { Formik, Form, Field } from "formik";
-import { Button } from '@material-ui/core';
+import { Button, CardMedia, InputLabel } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
 import TextField from '@material-ui/core/TextField';
+const API_HOST = "https://nagayandb.herokuapp.com/"
+// const API_HOST = "http://localhost:3001/"
 
 class ImagePost extends React.Component {
   constructor(props) {
@@ -10,7 +12,7 @@ class ImagePost extends React.Component {
     this.state = {
       previewImage: '',
       title: '',
-      error: null,
+      error: '',
       isLoaded: false
     };
   }
@@ -21,22 +23,27 @@ class ImagePost extends React.Component {
   }
 
   postImage() {
-    fetch('https://nagayandb.herokuapp.com/entertainers/1/images', {
+    fetch(API_HOST + 'entertainers/1/images', {
       method: 'POST',
       body: JSON.stringify({
         image: this.state.previewImage,
         title: this.state.title
       }),
       headers: new Headers({ 'Content-type' : 'application/json' })
-    }).then(() => {
-      this.fetchResponse();
     }).then( (res) => {
+      this.fetchResponse();
       console.log(res)
+      this.setState({ previewImage: '' })
+      if(res.status == 200){
+        this.setState({ error: '画像が登録されました。' })
+      }else{
+        this.setState({ error: res.statusText })
+      }
     })
   }
 
   fetchResponse(){
-    fetch('https://nagayandb.herokuapp.com/entertainers/1/images', { method: 'GET'} )
+    fetch(API_HOST + 'entertainers/1/images', { method: 'GET'} )
     .then( res => res.json() )
     .then( res => {
       console.log(res)
@@ -62,7 +69,8 @@ class ImagePost extends React.Component {
         {({ setFieldValue }) => {
           return (
             <Form onSubmit={this.onSubmit.bind(this)}>
-              <img className="image" src={this.state.previewImage ? this.state.previewImage : ""} />
+              <InputLabel id="standard-basic"name="errorMessage"  disabled={this.state.error == '' ? false : true}>{this.state.error}</InputLabel>
+              <CardMedia component="img" className="image" src={this.state.previewImage ? this.state.previewImage : ""} image={this.state.previewImage ? this.state.previewImage : ""} />
               <div>
                 <React.Fragment>
                   <Field
