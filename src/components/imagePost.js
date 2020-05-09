@@ -1,5 +1,8 @@
 import React from 'react';
 import { Formik, Form, Field } from "formik";
+import { Button } from '@material-ui/core';
+import SaveIcon from '@material-ui/icons/Save';
+import TextField from '@material-ui/core/TextField';
 
 class ImagePost extends React.Component {
   constructor(props) {
@@ -53,24 +56,28 @@ class ImagePost extends React.Component {
   };
 
   render() {
+
     return (
       <Formik initialValues={{}} >
         {({ setFieldValue }) => {
           return (
             <Form onSubmit={this.onSubmit.bind(this)}>
               <img className="image" src={this.state.previewImage ? this.state.previewImage : ""} />
-              <React.Fragment>
-                <Field
-                  id="select_image"
-                  type="file"
-                  name="file_image"
-                  onChange={e => this.setImage(e, setFieldValue)}
-                />
-                <Field type="hidden" name="file_image_hidden" />
-              </React.Fragment>
-              <label>title</label>
-              <input type="text" name="title" onChange={(e) => { this.setState({ title: e.target.value })}} />
-              <button className="submit-button" type="submit"> 追加 </button>
+              <div>
+                <React.Fragment>
+                  <Field
+                    id="select_image"
+                    type="file"
+                    name="file_image"
+                    onChange={e => this.setImage(e, setFieldValue)}
+                    />
+                  <Field type="hidden" name="file_image_hidden" />
+                </React.Fragment>
+              </div>
+              <div>
+                <TextField id="standard-basic" label="タイトル" name="title" onChange={(e) => { this.setState({ title: e.target.value })}} />
+                <Button variant="contained" color="primary" startIcon={<SaveIcon />} type="submit"> 追加 </Button>
+              </div>
             </Form>
           );
         }}

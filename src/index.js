@@ -1,14 +1,19 @@
 import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 import ReactDOM from 'react-dom';
 import './index.css';
-// import App from './App';
 import * as serviceWorker from './serviceWorker';
-import ImagePost from './components/post'
-{/* <App /> */}
+import App from './App'
+import Header from './Header'
+import Footer from './Footer'
 
 ReactDOM.render(
   <React.StrictMode>
-    <ImagePost />
+    <Router>
+      <Header />
+      <App />
+      <Footer />
+    </Router>
   </React.StrictMode>,
   document.getElementById('root')
 );
