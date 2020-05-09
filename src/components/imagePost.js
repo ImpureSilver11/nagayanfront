@@ -21,7 +21,7 @@ class ImagePost extends React.Component {
   }
 
   postImage() {
-    fetch('http://127.0.0.1:3001/entertainers/1/images', {
+    fetch('https://nagayandb.herokuapp.com/entertainers/1/images', {
       method: 'POST',
       body: JSON.stringify({
         image: this.state.previewImage,
@@ -36,7 +36,7 @@ class ImagePost extends React.Component {
   }
 
   fetchResponse(){
-    fetch('http://localhost:3001/entertainers/1/images', { method: 'GET'} )
+    fetch('https://nagayandb.herokuapp.com/entertainers/1/images', { method: 'GET'} )
     .then( res => res.json() )
     .then( res => {
       console.log(res)
