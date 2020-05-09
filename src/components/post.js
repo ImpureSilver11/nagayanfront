@@ -1,33 +1,34 @@
 import React from 'react';
+import { Formik, Form, Field } from "formik";
 
 class ImagePost extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      image: '',
+      previewImage: '',
       title: '',
       error: null,
-      isLoaded: false,
-      items: []
+      isLoaded: false
     };
   }
 
-  uploadImage() {
-
+  onSubmit(e) {
+    e.preventDefault()
+    this.postImage()
   }
 
   postImage() {
     fetch('http://127.0.0.1:3001/entertainers/1/images', {
       method: 'POST',
       body: JSON.stringify({
-        image: this.state.image,
-        title: this.state.title,
-        path: 1
+        image: this.state.previewImage,
+        title: this.state.title
       }),
       headers: new Headers({ 'Content-type' : 'application/json' })
     }).then(() => {
-      // リストの更新
       this.fetchResponse();
+    }).then( (res) => {
+      console.log(res)
     })
   }
 
@@ -35,29 +36,45 @@ class ImagePost extends React.Component {
     fetch('http://localhost:3001/entertainers/1/images', { method: 'GET'} )
     .then( res => res.json() )
     .then( res => {
-      this.setState({
-        image : res
-      });
+      console.log(res)
+      this.setState({ image : res })
     })
   }
+
+  setImage = (e, setFieldValue) => {
+    let files = e.target.files;
+    let reader = new FileReader();
+    // 画像をbase64にエンコードします.
+    reader.readAsDataURL(files[0]);
+    reader.onload = () => {
+      this.setState({ previewImage: reader.result });
+      setFieldValue("image_file_field", reader.result);
+    };
+  };
+
   render() {
     return (
-      <div>
-        <form method="post" enctype="multipart/form-data">
-          <ul>
-            <li>
-              <input type="file"
-                      accept="image/*"
-                      name="image"
-                      value={this.state.image}
-                      onChange={(e) => { this.setState({ image: e.target.value })}}
+      <Formik initialValues={{}} >
+        {({ setFieldValue }) => {
+          return (
+            <Form onSubmit={this.onSubmit.bind(this)}>
+              <img className="image" src={this.state.previewImage ? this.state.previewImage : ""} />
+              <React.Fragment>
+                <Field
+                  id="select_image"
+                  type="file"
+                  name="file_image"
+                  onChange={e => this.setImage(e, setFieldValue)}
                 />
+                <Field type="hidden" name="file_image_hidden" />
+              </React.Fragment>
+              <label>title</label>
               <input type="text" name="title" onChange={(e) => { this.setState({ title: e.target.value })}} />
-            </li>
-          </ul>
-          <button type="submit" onClick={() => this.postImage()}>追加</button>
-        </form>
-      </div>
+              <button className="submit-button" type="submit"> 追加 </button>
+            </Form>
+          );
+        }}
+      </Formik>
     );
   }
 }
